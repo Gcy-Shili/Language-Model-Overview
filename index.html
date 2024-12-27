@@ -13,7 +13,20 @@
   <script>
     window.$docsify = {
       name: 'Language Model 综述',
-      repo: 'https://github.com/Gcy-Shili/Language-Model-Overview'
+      repo: 'https://github.com/Gcy-Shili/Language-Model-Overview',
+      search: {
+          paths: 'auto',
+          placeholder: '点击此处搜索',
+          noData: '没有找到结果！',
+          depth: 6
+        },
+      count: {
+        countable:true,
+        fontsize:'0.9em',
+        color:'rgb(90,90,90)',
+        language:'chinese'
+      },
+      coverpage: true
     }
   </script>
   <!-- Docsify v4 -->
@@ -27,35 +40,15 @@
   <!-- or <script src="//cdn.jsdelivr.net/gh/upupming/docsify-katex@latest/dist/docsify-katex.js"></script> -->
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script>
-    window.$docsify = {
-        // 全文搜索
-        search: {
-          paths: 'auto',
-          placeholder: 'Type to search',
-          noData: 'No Results!',
-          depth: 6
-        }
-        
-      }
-  </script>
   
   <!-- 全文搜索 -->
   <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script> -->
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script>
-    window.$docsify = {
-      // 字数统计
-      count: {
-        countable:true,
-        fontsize:'0.9em',
-        color:'rgb(90,90,90)',
-        language:'chinese'
-      }
-    }
-   </script>
 
   <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 
 </body>
 </html>
