@@ -82,23 +82,23 @@ $$
   - $C(\text{love NLP}) = 3$
 - 概率估计（假设无平滑）：
 
-  $$
-  p(\text{love} | \text{I}) = \frac{C(\text{I love})}{C(\text{I})} = \frac{3}{3} = 1
-  $$
+$$
+p(\text{love} | \text{I}) = \frac{C(\text{I love})}{C(\text{I})} = \frac{3}{3} = 1
+$$
   
-  $$
-  p(\text{NLP} | \text{love}) = \frac{C(\text{love NLP})}{C(\text{love})} = \frac{3}{3} = 1
-  $$
+$$
+p(\text{NLP} | \text{love}) = \frac{C(\text{love NLP})}{C(\text{love})} = \frac{3}{3} = 1
+$$
 
-  $$
-  p(\text{I}) = \frac{C(\text{I})}{\text{总词数}} = \frac{3}{9} = \frac{1}{3}
-  $$
+$$
+p(\text{I}) = \frac{C(\text{I})}{\text{总词数}} = \frac{3}{9} = \frac{1}{3}
+$$
   
 - 联合概率：
 
-  $$
-  p(\text{I love NLP}) = p(\text{I}) \cdot p(\text{love} | \text{I}) \cdot p(\text{NLP} | \text{love}) = \frac{1}{3} \times 1 \times 1 = \frac{1}{3}
-  $$
+$$
+p(\text{I love NLP}) = p(\text{I}) \cdot p(\text{love} | \text{I}) \cdot p(\text{NLP} | \text{love}) = \frac{1}{3} \times 1 \times 1 = \frac{1}{3}
+$$
   
 #### 2.3. 优点与缺点
 ##### 优点
@@ -784,7 +784,7 @@ $$
 $$
 \begin{flalign}
 & h_0 = UW_e+W_p && \\ 
-& h_l = \texttt{transformer-block} (h_{l-1}) \forall l \in [1,n] && \\ 
+& h_l = \texttt{transformer-block} (h_{l-1}) ~ \forall l \in [1,n] && \\ 
 & P(u) = \texttt{softmax}(h_nW_{e}^{T}) &&
 \end{flalign}
 $$
