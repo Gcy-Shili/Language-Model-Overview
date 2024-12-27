@@ -5,12 +5,14 @@
 语言模型（Language Model, LM）是用于**建模自然语言的概率模型**，简单来说，其任务就是评估一个给定的词序列（即一个句子）在真实世界中出现的概率，或者说，**对于任意的词序列，这个模型能够计算出这个序列是一句话的概率。**
 
 给定一个词表 $V$，**LM** 应当能计算出任意单词序列 $w_1, w_2, ..., w_n$ 是一句话的概率 
+
 $$
 p(w_1, w_2, ..., w_n)
 $$
 
 
 而该公式也可以写成
+
 $$
 \begin{align}
 p(w_1, w_2, ..., w_n) &= p(w_1) \cdot p(w_2|w_1) \cdot p(w_3|w_1,w_2) ... p(w_n|w_2,...,w_{n-1}) \\
@@ -35,6 +37,7 @@ $$
 - ......
 
 N-gram 模型的核心思想是利用**（N阶）马尔可夫假设**（这里的N与N-gram的N不同（相差1）），即假设当前词的出现**仅依赖于前面有限个（N）词**。具体来说，N 阶马尔可夫假设每个词仅依赖前 N 个词时：
+
 $$
 p(w_i∣w_1,w_2,…,w_{i−1}) \approx p(w_i∣w_{i−N},…,w_{i−1})
 $$
@@ -55,6 +58,7 @@ $$
 - 同时，统计 $(N-1)$-gram 的出现次数 $C(w_{i-(N-1)}, \ldots, w_{i-1})$
 ##### c. 概率估计
 使用**最大似然估计**来估计条件概率：
+
 $$
 p(w_i | w_{i-(N-1)}, \ldots, w_{i-1}) = \frac{C(w_{i-(N-1)}, \ldots, w_i)}{C(w_{i-(N-1)}, \ldots, w_{i-1})}
 $$
@@ -75,17 +79,20 @@ $$
   - $C(\text{I love}) = 3$
   - $C(\text{love NLP}) = 3$
 - 概率估计（假设无平滑）：
-  $$
+
+   $$
   p(\text{love} | \text{I}) = \frac{C(\text{I love})}{C(\text{I})} = \frac{3}{3} = 1
   $$
   
   $$
   p(\text{NLP} | \text{love}) = \frac{C(\text{love NLP})}{C(\text{love})} = \frac{3}{3} = 1
   $$
+
   $$
   p(\text{I}) = \frac{C(\text{I})}{\text{总词数}} = \frac{3}{9} = \frac{1}{3}
   $$
 - 联合概率：
+
   $$
   p(\text{I love NLP}) = p(\text{I}) \cdot p(\text{love} | \text{I}) \cdot p(\text{NLP} | \text{love}) = \frac{1}{3} \times 1 \times 1 = \frac{1}{3}
   $$
