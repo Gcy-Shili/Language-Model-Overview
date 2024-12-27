@@ -792,7 +792,7 @@ L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda \ast L_1(\mathcal{C})
 $$
 总的来说，在微调期间，我们只需要额外的两个参数：$W_y$ 和 **分隔符标记的嵌入**
 
->  ![image-20241225173802272](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241225173802272.png)图左：模型架构与训练目标；图右：添加线性层进行不同的微调任务
+>  ![gpt1](./gpt1.png)图左：模型架构与训练目标；图右：添加线性层进行不同的微调任务
 
 ### 8. GPT-2
 
@@ -836,7 +836,7 @@ GPT-3和GPT-2相比，延续了一贯的大力出奇迹的思路，继续把模�
 
 GPT-3不做任何 Fine-tuning，只重点考察了在 Zero-Shot(只有任务描述），One-Shot（任务描述+单个例子）和 Few-Shot （任务描述+多个例子）的表现
 
-![image-20241225232353599](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241225232353599.png)
+![gpt3](./gpt3.png)
 
 #### 模型结构
 
@@ -853,7 +853,7 @@ GPT-3不做任何 Fine-tuning，只重点考察了在 Zero-Shot(只有任务描�
 
 ##### 标准 Self-Attention
 
-![image-20241225234607703](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241225234607703.png)
+![self_attn](./self_attn.png)
 
 Self Attention 的计算时间和显存占用量都是 $O(n^2)$级别的，在上图中，左边显示了注意力矩阵，右边显示了关联性，这表明每个元素都跟序列内所有元素有关联，所以，如果要节省显存，加快计算速度，那么一个基本的思路就是减少关联性的计算，也就是认为每个元素只跟序列内的一部分元素相关，这就是**稀疏Attention**的基本原理。
 
@@ -861,7 +861,7 @@ Self Attention 的计算时间和显存占用量都是 $O(n^2)$级别的，在�
 
 Atrous Self Attention 就是启发于 “空洞卷积（Atrous Convolution）”，如下右图所示，它对相关性进行了约束，**强行要求每个元素只跟它相对距离**为 $k,~2k,~3k,…$的元素关联，其中 $k>1$ 是预先设定的超参数，从下左的注意力矩阵看，就是强行要求相对距离不是 $k$ 的倍数的注意力为 0（白色代表 0）
 
-![image-20241225234905964](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241225234905964.png)
+![Atrous_attn](./Atrous_attn.png)
 
  由于现在计算注意力是“跳着”来了，所以实际上每个元素只跟大约 $\frac{n}{k}$ 个元素算相关性，这样一来理想情况下运行效率和显存占用都变成了$O(\frac{n^2}{k})$，也就是说能直接降低到原来的 $\frac{1}{k}$
 
@@ -869,7 +869,7 @@ Atrous Self Attention 就是启发于 “空洞卷积（Atrous Convolution）”
 
 中文可称之为 “局部自注意力”。其实自注意力机制在 CV 领域统称为 “Non Local”，而显然 Local Self Attention 则要**放弃全局关联**，重新**引入局部关联**。具体来说也很简单，就是约束每个元素只与前后 $k$ 个元素以及自身有关联，如下图所示：
 
-![image-20241225235326698](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241225235326698.png)
+![local_attn](./local_attn.png)
 
 从注意力矩阵来看，就是相对距离超过 $k$ 的注意力都直接设为 0，其实 Local Self Attention 就**跟普通卷积很像**了，都是保留了一个 $2k+1$ 大小的窗口，然后在窗口内进行一些运算，不同的是普通卷积是把窗口展平然后接一个全连接层得到输出，而现在是窗口内通过注意力来加权平均得到输出。对于 Local Self Attention 来说，每个元素只跟 $2k+1$ 个元素算相关性，这样一来理想情况下运行效率和显存占用都变成了 $O((2k+1)n)∼O(kn)$ 了，也就是说随着 $n$ 而线性增长，这是一个很理想的性质——当然也直接牺牲了长程关联性
 
@@ -881,7 +881,7 @@ Atrous Self Attention 就是启发于 “空洞卷积（Atrous Convolution）”
 
 但是OpenAI没有这样做，它直接将两个 Atrous Self Attention 和 Local Self Attention 合并为一个：
 
-![image-20241225235811101](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241225235811101.png)
+![Sparse_attn](./Sparse_attn.png)
 
 从注意力矩阵上看就很容易理解了，就是除了相对距离不超过 $k$ 的、相对距离为 $k,2k,3k,…$ 的注意力都设为 **0**，这样一来 Attention 就具有 “局部紧密相关和远程稀疏相关” 的特性，这对很多任务来说可能是一个不错的先验，因为真正需要密集的长程关联的任务事实上是很少的
 
@@ -921,7 +921,7 @@ ChatGPT 是 InstructGPT 的兄弟模型，该模型经过训练，能够在提�
 
 #### 10.2. 方法：Reinforcement Learning with Human Feedback（RLHF）
 
-![image-20241226153155447](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241226153155447.png)
+![rlhf](./rlhf.png)
 
 - Step 1：**监督微调（SFT）**
 - Step 2：**训练奖励模型（RM）**
@@ -1084,7 +1084,7 @@ def reward_model_loss(prompt, better_response, worse_response):
 
 ###### 10.2.2.1. 步骤
 
-![image-20241226235756310](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20241226235756310.png)
+![rm](./rm.png)
 
 训练出一个**奖励模型**的步骤如下：
 
