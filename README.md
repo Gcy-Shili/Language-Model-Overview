@@ -66,9 +66,11 @@ $$
 ##### d. 平滑处理
 由于实际语料中可能存在未见过的 $N$-gram，为了避免概率为零的问题，需要进行平滑处理。常见的平滑方法包括：
 - **加一平滑（Laplace Smoothing）**：
+
   $$
   p(w_i | w_{i-(N-1)}, \ldots, w_{i-1}) = \frac{C(w_{i-(N-1)}, \ldots, w_i) + 1}{C(w_{i-(N-1)}, \ldots, w_{i-1}) + |V|}
   $$
+  
 - **Kneser-Ney 平滑**、**Good-Turing 平滑**等更高级的平滑方法。
 #### 2.2. 示例
 以 Bigram 模型为例，假设词表 $V = \{ \text{I}, \text{love}, \text{NLP} \}$，语料库包含句子 "I love NLP" 出现了 3 次。
@@ -80,7 +82,7 @@ $$
   - $C(\text{love NLP}) = 3$
 - 概率估计（假设无平滑）：
 
-   $$
+  $$
   p(\text{love} | \text{I}) = \frac{C(\text{I love})}{C(\text{I})} = \frac{3}{3} = 1
   $$
   
@@ -91,11 +93,13 @@ $$
   $$
   p(\text{I}) = \frac{C(\text{I})}{\text{总词数}} = \frac{3}{9} = \frac{1}{3}
   $$
+  
 - 联合概率：
 
   $$
   p(\text{I love NLP}) = p(\text{I}) \cdot p(\text{love} | \text{I}) \cdot p(\text{NLP} | \text{love}) = \frac{1}{3} \times 1 \times 1 = \frac{1}{3}
   $$
+  
 #### 2.3. 优点与缺点
 ##### 优点
 1. **简单易实现**：$N$-gram 模型基于统计，算法简单，易于实现。
@@ -212,14 +216,17 @@ Generated sentence: I enjoy learning NLP
 ##### 词汇表与索引映射
 
 首先我们需要构建一个固定的词汇表 $V$，包含训练语料中出现的所有唯一词语，每个词分配一个唯一索引 $i$，即
+
 $$
 V = \{ w_1,w_2,...,w_{|V|} \}
 $$
+
 每个词 $w_i$ 被映射到一个整数索引 $i$
 
 ##### One-Hot编码
 
 每个词 $w_i$ 被表示为 $|V|$ 维的 one-hot 向量 $\mathbf{x}_i$
+
 $$
 \mathbf{x}_i[j]=
 \begin{cases}
@@ -227,14 +234,17 @@ $$
 0&  \text{otherwise}
 \end{cases}
 $$
+
 这种表示方式虽简单但是在大词汇表情况下会导致高维度和稀疏性问题
 
 ##### 词嵌入（Word Embedding）
 
 为解决上述问题，NNLM 引入了词嵌入层，将高维的 one-hot 向量映射到低维的稠密向量空间，假设嵌入维度为 $d$，嵌入矩阵维度为 $d \times |V|$ ，每个词的嵌入向量 $\mathbf{e}_i$ 可通过以下方式获得：
+
 $$
 \mathbf{e}_i = \mathbf{W}\mathbf{x}_i
 $$
+
 即从矩阵 $\mathbf{W}$ 中取出对应索引的一行词嵌入向量
 
 #### 3.2. NNLM模型结构
@@ -247,24 +257,31 @@ NNLM 通常采用前馈神经网络（Feedforward Neural Network）结构，主�
 ##### 输入层与嵌入层
 假设我们使用 **Bigram（2-gram）模型**，即上下文包含前一个词。对于一个上下文 $w_{t-1}$，其 one-hot 向量为 $\mathbf{x}_{t-1}$。
 通过嵌入层，得到**嵌入向量**：
+
 $$
 \mathbf{e}_{t-1} = \mathbf{W} \mathbf{x}_{t-1}
 $$
+
 对于更高阶的 N-gram 模型（如 Trigram），多个词的嵌入向量会被**拼接**。
 
 ##### 隐藏层
 隐藏层的计算过程如下：
+
 $$
 \mathbf{h} = \sigma\left( \mathbf{W}_1 \mathbf{c} + \mathbf{b}_1 \right)
 $$
+
 其中，$\mathbf{c}$ 是上下文向量（**拼接后的嵌入向量**）。
 
 ##### 输出层
 输出层的计算过程如下：
+
 $$
 \mathbf{o} = \mathbf{W}_2 \mathbf{h} + \mathbf{b}_2
 $$
+
 通过 softmax 函数，将输出向量 $\mathbf{o}$ 转换为概率分布：
+
 $$
 p(w | \text{context}) = \frac{\exp(o_w)}{\sum_{w' \in V} \exp(o_{w'})}
 $$
@@ -542,6 +559,7 @@ CBOW 训练后的词向量：
 
 
 ELMo 通过训练双向语言模型来捕捉上下文信息。给定一个句子 $S = (w_1, w_2, \ldots, w_T)$，前向语言模型和后向语言模型的目标分别为：
+
 $$
 P(S) = \prod_{t=1}^{T} P(w_t | w_1, \ldots, w_{t-1})
 $$
@@ -549,13 +567,16 @@ $$
 $$
 P(S) = \prod_{t=1}^{T} P(w_t | w_{t+1}, \ldots, w_T)
 $$
+
 **3.2.2. 双向 LSTM 表示**
 对于每个词 $w_t$，前向 LSTM 和后向 LSTM 生成隐藏状态 $\overrightarrow{h_t^k}$ 和 $\overleftarrow{h_t^k}$ ，其中 $k$ 表示第 $k$ 层。
 **3.2.3. ELMo 词向量**
 ELMo 的词向量表示为所有层隐藏状态的**加权和**：
+
 $$
 \text{ELMo}(w_t) = \gamma \sum_{k=0}^{K} \alpha_k h_t^k
 $$
+
 其中：
 
 - $\alpha_k$ 是每层的权重。
@@ -751,18 +772,20 @@ BERT 使用的 Transformer 编码器，由于其 self-attention 机制，所以�
 ##### 7.2.1. Unsupervised Pre-training
 
 给定一个无监督标记的语料库 $\mathcal{U} = {u_1,...,u_n}$ ，使用一个标准的语言建模目标来最大化以下概率：
+
 $$
 L_1(\mathcal{U}) = \sum_{i}\text{log}~P(u_i|u_{i-k},...,u_{i-1};\Theta)
 $$
+
 其中 $k$ 是上下文窗口大小，条件概率 $P$ 使用具有参数 $\Theta$ 的神经网络进行建模（使用 SGD 训练）
 
 在[论文](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)的实验中，使用了一个多层（multi-layer）的 **Transformer Decoder** 作为语言模型，该模型对输入的上下文 tokens 应用多头自注意力，并随后通过 **position-wise feedforward layers** 产生 target tokens 的输出分布：
 
 $$
 \begin{flalign}
-& h_0 = UW_e+W_p \\
-& h_l = \texttt{transformer-block} (h_{l-1}) \forall i \in [1,n] \\
-& P(u) = \texttt{softmax}(h_nW_{e}^{T})
+& h_0 = UW_e+W_p && \\ 
+& h_l = \texttt{transformer-block} (h_{l-1}) \forall l \in [1,n] && \\ 
+& P(u) = \texttt{softmax}(h_nW_{e}^{T}) &&
 \end{flalign}
 $$
 
@@ -775,22 +798,28 @@ $$
 ##### 7.2.2. Supervised Fine-tuning
 
 假设一个有标签的数据集 $\mathcal{C}$ ，每一个实例由一个输入 tokens 序列 $x^1,..., x^m$ 和标签 $y$ 组成，这些输入经过前述的预训练模型，获得最终的 Transformer block 的输出 $h_{l}^{m}$ ，然后将其输入一个新添加的线性输出层（具有参数 $W_y$）用于预测标签 $y$：
+
 $$
 P(y|x^1,...x^m) = \texttt{softmax} (h_l^mW_y)
 $$
+
 以实现以下目标的最大化：
+
 $$
 L_2(\mathcal{C}) = \sum_{(x,~y)}logP(y|x^1,...,x^m)
 $$
+
 另外，将 语言建模 作为 辅助目标 添加到微调中，能通过
 
 - 提高监督模型的泛化能力
 - 加速收敛
 
 来帮助模型学习，具体来说做以下优化（包括一个参数 $\lambda$）：
+
 $$
 L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda \ast L_1(\mathcal{C})
 $$
+
 总的来说，在微调期间，我们只需要额外的两个参数：$W_y$ 和 **分隔符标记的嵌入**
 
 >  ![gpt1](./gpt1.png)图左：模型架构与训练目标；图右：添加线性层进行不同的微调任务
@@ -1034,9 +1063,11 @@ C vs D
      3. 提高了模型性能：验证准确率和损失都更好
 
 具体来说，奖励模型的损失函数为：
+
 $$
 \texttt{loss}(\theta) = - \frac{1}{\binom{K}{2}}E_{(x,~y_w,~y_l) \thicksim D}[\texttt{log}(\sigma(r_{\theta}(x,~y_w)-r_{\theta}(x,~y_l)))]
 $$
+
 其中 $r_{\theta}(x,~y)$ 是带有参数 $\theta$ 的 RM 对 prompt $x$ 和 completion $y$ 的标量输出，$y_w$ 是 $y_w$ 和 $y_l$ 中用户更偏好的输出（ preferred completion ），$D$ 是人类比较数据集。
 
 - $\theta$：模型参数
