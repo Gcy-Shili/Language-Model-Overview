@@ -782,11 +782,11 @@ $$
 在[论文](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)的实验中，使用了一个多层（multi-layer）的 **Transformer Decoder** 作为语言模型，该模型对输入的上下文 tokens 应用多头自注意力，并随后通过 **position-wise feedforward layers** 产生 target tokens 的输出分布：
 
 $$
-\begin{flalign}
-& h_0 = UW_e+W_p && \\ 
-& h_l = \texttt{transformer-block} (h_{l-1}) ~ \forall l \in [1,n] && \\ 
-& P(u) = \texttt{softmax}(h_nW_{e}^{T}) &&
-\end{flalign}
+\begin{align*}
+h_0 &= UW_e+W_p \\ 
+h_l &= \texttt{transformer-block} (h_{l-1}) ~ \forall l \in [1,n] \\ 
+P(u) &= \texttt{softmax}(h_nW_{e}^{T})
+\end{align*}
 $$
 
 - 其中，$U$ 表示输入序列中上下文窗口内的所有单词，$W_e$ 是嵌入矩阵，$W_p$ 是位置嵌入矩阵。$h_0$ 是从输入序列中提取出的初始特征向量，它是由 $U$ 乘以 $W_e$ 并加上$W_p$ 得到的；有别于基础 Transformer 用的三角函数来做位置嵌入，该论文用的是**可学习**的位置矩阵来表征位置信息
