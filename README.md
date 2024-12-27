@@ -757,6 +757,7 @@ $$
 其中 $k$ 是上下文窗口大小，条件概率 $P$ 使用具有参数 $\Theta$ 的神经网络进行建模（使用 SGD 训练）
 
 在[论文](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)的实验中，使用了一个多层（multi-layer）的 **Transformer Decoder** 作为语言模型，该模型对输入的上下文 tokens 应用多头自注意力，并随后通过 **position-wise feedforward layers** 产生 target tokens 的输出分布：
+
 $$
 \begin{flalign}
 & h_0 = UW_e+W_p \\
